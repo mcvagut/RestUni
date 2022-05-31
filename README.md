@@ -6,10 +6,10 @@
 	- Moya Vargas Mauro Adolfo
 	- Valda Gutiérrez Moises Carlos
 
-##Introducción
+## Introducción
 La función principal de esta API es controlar y manejar de manera correcta la información que se encuentra en la Base de Datos, cuando `estudiantes` o `docentes` de la universidad realicen consultas como ser consulta horario, consulta de detalle de materias, consultar lista de estudiantes, solicitar permisos o hagan un registro de algo específico.
 
-##Problemática
+## Problemática
 Los `estudiantes` y `docentes` de la Universidad Católica necesitan conocer la siguiente información:
 
 **Estudiante:**
