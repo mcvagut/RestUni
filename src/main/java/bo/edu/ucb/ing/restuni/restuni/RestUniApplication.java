@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RestuniApplication {
+public class RestUniApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RestuniApplication.class, args);
+		SpringApplication.run(RestUniApplication.class, args);
 	}
 
 }
