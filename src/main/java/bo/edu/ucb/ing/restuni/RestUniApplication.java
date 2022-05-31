@@ -1,4 +1,4 @@
-package bo.edu.ucb.ing.restuni.restuni;
+package bo.edu.ucb.ing.restuni;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
