@@ -1,0 +1,736 @@
+openapi: 3.0.1
+
+info:
+  title: API Universidad Católica Boliviana San Pablo
+  description: _La función principal de esta API es controlar y manejar de manera correcta la información que se encuentra en la Base de Datos, cuando `estudiantes` o `docentes` de la universidad realicen consultas como ser consulta horario, consulta de detalle de materias, consultar lista de estudiantes, solicitar permisos o hagan un registro de algo específico._
+  contact:
+    email: moises.valda@ucb.edu.bo
+
+  version: 1.0.0
+
+servers:
+  - url: http://api/v1/estudiante
+    description: Estudiante
+  - url: http://api/v1/docente
+    description: Docente
+
+tags:
+  - name: Estudiante
+    description: Este es el Endpoint que maneja toda la información necesaria de los estudiantes de la Universidad Católica Boliviana San Pablo.
+  - name: Docente
+    description: Este es el Endpoint que maneja toda la información necesaria de los docentes de la Universidad Católica Boliviana San Pablo.
+
+externalDocs:
+  description: Documentación API Swagger Version 3.0
+  url: https://swagger.io/docs/specification/about/
+
+paths:
+  ##LOGIN ESTUDIANTE
+  /Estudiante/auth:
+    post:
+      tags:
+        - Estudiante
+      summary: Login de un Estudiante en la Aplicación
+      description: Permite hacer login al estudiante
+      operationId: loginEstudiante
+      parameters:
+        - in: query
+          name: Carnet de Identidad
+          required: true
+          description: El carnet de Identidad del estudiante
+          schema:
+            type: string
+            example: 12345678
+
+        - in: query
+          name: Contraseña
+          description: La contraseña del estudiante
+          required: true
+          schema:
+            type: string
+            example: passEstudiante
+
+      responses:
+        200:
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InfoLoginEstudiante"
+        401:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario no autorizado, usuario o contraseña incorrecto" }
+
+        404:
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario no encontrado" }
+  ## IMAGEN ESTUDIANTE
+  /Estudiante/{EstudianteId}/Imagen:
+    get:
+      tags:
+        - Estudiante
+      summary: Foto de perfil de un estudiante específico.
+      description: Un estudiante tiene su foto de perfil alojada en una URL y puede no tener la foto de perfil para ello se asignará alguna estándar.
+      operationId: QueryImagenEstudiante
+      parameters:
+        - in: path
+          name: EstudianteId
+          required: true
+          description: El Id del estudiante que tiene asignada una foto de perfil.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Consulta exitosa
+          content:
+            image/png:
+              schema:
+                type: string
+                example: ["url": "//http:example.com/imagenEstudiante.png"]
+
+        404:
+          description: Usuario sin foto de perfil.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario sin foto de perfil, se usará una imagen por defecto." }
+
+  ### Lista de materias del estudiante
+  /Estudiante/{EstudianteId}/Materias/:
+    get:
+      tags:
+        - Estudiante
+      summary: Obtener materias del estudiante
+      description: Obtener la lista de materias del usuario que inició la sesión
+      parameters:
+        - name: EstudianteId
+          in: path
+          description: id del estudiante
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Lista de Materias
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ListMaterias'
+
+        404:
+          description: El estudiante no tiene materias
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "El estudiante no tiene materias inscritas" }
+
+  ##1.CONSULTA DE HORARIO DE ESTUDIANTE
+  /Estudiante/{EstudianteId}/Horario/:
+    get:
+      tags:
+        - Estudiante
+      summary: El estudiante tiene información de su horario.
+      description: Un estudiante puede realizar una consulta para conocer su horario, eso conlleva mostrar todas las materias a las que se encuentra inscrito, el detalle incluye hora de inicio, hora de finalización, paralelo, aula y los días en específico.
+      operationId: QueryHorarioEstudiante
+      parameters:
+        - in: path
+          name: EstudianteId
+          required: true
+          description: El Id del estudiante que realiza la consulta
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InfoHorarioEst"
+
+        404:
+          description: Estudiante no tiene materias inscritas
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "El estudiante no tiene materias inscritas" }
+
+  /Materia/{MateriaId}/:
+
+    ### 2.Detalle de materias
+    get:
+      tags:
+        - Estudiante
+      summary: Obtener el detalle de una materia(links de l clase)
+      description: obtener el detalle de una materia seleccionada por el estudiante
+      parameters:
+        - name: MateriaId
+          in: path
+          description: id de la materia
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: detalle de materia
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/InfoDetalle'
+
+        400:
+          description: No existe la información
+
+  /Estudiante/{EstudianteId}/Deudas:
+
+    ### 3.Deudas
+    get:
+      tags:
+        - Estudiante
+      summary: Obtener deudas del estudiante
+      description: Obtener deudas del usuario que inició la sesión
+      parameters:
+        - name: EstudianteId
+          in: path
+          description: id del estudiante
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Lista de deudas
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/InfoDeudas'
+
+        400:
+          description: No se pudo encontrar la información
+
+
+  /Estudiante/{EstudianteId}/Notas:
+
+
+    ### 4.Notas
+    get:
+      tags:
+        - Estudiante
+      summary: Obtener notas del estudiante
+      description: Obtener notas del usuario que inició la sesión
+      parameters:
+        - name: EstudianteId
+          in: path
+          description: id del estudiante
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Lista de calificaciones
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/InfoNotas'
+
+        400:
+          description: No se pudoencontrar la información
+
+        403:
+          description: Datos obligatorios no enviados
+
+  /Estudiante/{EstudianteId}/permisos:
+
+    ### 5.Permisos
+    get:
+      tags:
+        - Estudiante
+      summary: Obtener La Informacion Permisos Solicitados
+      description: Obtener la informacion de permisos solicitados
+      parameters:
+        - name: EstudianteId
+          in: path
+          description: id del estudiante
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Lista de calificaciones
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/InfPermiso'
+
+        400:
+          description: No se pudoencontrar la información
+
+        404:
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario no encontrado" }
+
+        403:
+          description: Datos obligatorios no enviados
+
+  /Estudiante/{EstudianteId}/{materiaId}/{fecha}/permisos:
+    ### Enviar solicitud de amistad
+    post:
+      tags:
+        - "Estudiante"
+      summary: "Solicitar Permisos"
+      description: "Estudiante puede Solicitar Permisos"
+      operationId: "permisosid"
+      parameters:
+        - name: EstudianteId
+          in: path
+          description: id del estudiante
+          required: true
+          schema:
+            type: string
+        - name: materiaId
+          in: path
+          description: id de la materia
+          required: true
+          schema:
+            type: string
+        - name: fecha
+          in: path
+          description: Fecha de la solicitud
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: La solicitud ha sido enviada
+        403:
+          description: No se pudo enviar la solicitud
+
+  ##LOGIN DOCENTE
+  /Docente/auth:
+    post:
+      tags:
+        - Docente
+      summary: Login de un Docente en la Aplicación.
+      description: Permite hacer login al Docente.
+      operationId: loginDocente
+      parameters:
+        - in: query
+          name: Carnet de Identidad
+          required: true
+          description: El carnet de Identidad del docente
+          schema:
+            type: string
+            example: 987654321
+
+        - in: query
+          name: Contraseña
+          description: La contraseña del docente
+          required: true
+          schema:
+            type: string
+            example: passDocente
+
+      responses:
+        200:
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InfoLoginDocente"
+        401:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario no Autorizado, usuario o contraseña incorrecto" }
+
+        404:
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario no encontrado" }
+
+  ## IMAGEN DOCENTE
+  /Docente/{DocenteId}/Imagen:
+    get:
+      tags:
+        - Docente
+      summary: Foto de perfil de un docente en específico.
+      description: Un docente tiene su foto de perfil alojada en una URL y puede no tener la foto de perfil para ello se asignará alguna estándar.
+      operationId: QueryImagenDocente
+      parameters:
+        - in: path
+          name: DocenteId
+          required: true
+          description: El Id del docente que tiene asignada una foto de perfil.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Consulta exitosa
+          content:
+            image/png:
+              schema:
+                type: string
+                example: ["url": "//http:example.com/imagenDocente.png"]
+
+        404:
+          description: Usuario sin foto de perfil
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "Usuario sin foto de perfil, se usará una imagen por defecto." }
+
+  ### Lista de materias del docente
+  /Docente/{DocenteId}/Materias/:
+    get:
+      tags:
+        - Docente
+      summary: Obtener materias del docente
+      description: Obtener la lista de materias del usuario que inició la sesión
+      parameters:
+        - name: DocenteId
+          in: path
+          description: id del docente
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Lista de Materias
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/ListMateriasDoc'
+
+        404:
+          description: El docente no tiene materias
+          content:
+            application/json:
+             schema:
+                type: string
+                example: { "message": "El docente no tiene asignadas las materias" }
+
+
+  ##CONSULTA DE HORARIO POR MATERIA - DOCENTE
+  /Docente/{DocenteId}/Horario/Materia/{MateriaId}:
+    get:
+      tags:
+        - Docente
+      summary: El docente tiene información de su horario.
+      description: Un docente puede realizar una consulta para conocer su horario, cada docente tiene asignadas ciertas materias, dependiendo de la materia seleccionada se mostrará el horario correspondiente que incluye hora de inicio, hora de finalización, paralelo, aula y los días en específico para dicha materia.
+      operationId: QueryHorarioDoc
+      parameters:
+        - in: path
+          name: DocenteId
+          required: true
+          description: El Id del docente que realiza la consulta.
+          schema:
+            type: integer
+            example: 1
+
+        - in: path
+          name: MateriaId
+          required: true
+          description: El Id de la materia de la cual se quiere conocer el horario.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InfoHorarioDoc"
+        404:
+          description: Usuario no tiene materias inscritas
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "El Docente no tiene materias inscritas" }
+
+
+  ##CONSULTA DE LISTA DE ESTUDIANTES POR MATERIA - DOCENTE
+  /Docente/{DocenteId}/Lista/Materia/{MateriaId}:
+    get:
+      tags:
+        - Docente
+      summary: El docente tiene información de la lista de estudiantes por materia.
+      description: Un docente puede realizar una consulta para conocer la lista de estudiantes, cada docente tiene unas materias asignadas, por ende, cuando selecciona su materia específica debe obtener como respuesta la lista de todos los estudiantes inscritos a dicha materia, en detalle se mostrarán los apellidos, nombres y carnet de identidad de los estudiantes.
+      operationId: QueryListaDoc
+
+      parameters:
+        - in: path
+          name: DocenteId
+          required: true
+          description: El Id del docente que realiza la consulta.
+          schema:
+            type: integer
+            example: 1
+
+        - in: path
+          name: MateriaId
+          required: true
+          description: El Id de la materia de la cual se desea obtener los estudiantes incritos.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Consulta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InfoListaDoc"
+
+        404:
+          description: Sin estudiantes inscritos
+          content:
+            application/json:
+              schema:
+                type: string
+                example: { "message": "No tiene estudiantes inscritos a esta materia" }
+
+
+components:
+  schemas:
+
+    InfoLoginEstudiante:
+      type: object
+      properties:
+        EstudianteId:
+          type: integer
+          example: 1
+        Nombres:
+          type: string
+          example: Moises Carlos
+        Apellidos:
+          type: string
+          example: Valda Gutiérrez
+
+
+
+    InfoHorarioEst:
+      type: object
+      properties:
+        Día:
+          type: string
+          example: Martes
+        Materia:
+          type: string
+          example: Ingeniería del Software
+        Paralelo:
+          type: string
+          example: P1
+        Aula:
+          type: string
+          example: C003
+        HoraInicio:
+          type: string
+          pattern: date-time
+          example: 13:30:00
+        HoraFin:
+          type: string
+          pattern: date-time
+          example: 15:15:00
+
+
+    ListMaterias:
+      type: array
+      items:
+        type: object
+        properties:
+          Nombre:
+            type: string
+
+      example:
+        -  "Nombre":  Ingeniería del software
+        -  "Nombre":  Base de datos I
+        -  "Nombre":  Internet de las cosas
+        -  "Nombre":  Redes I
+
+    ListMateriasDoc:
+      type: array
+      items:
+        type: object
+        properties:
+          Nombre:
+            type: string
+
+      example:
+        -  "Nombre":  Ingeniería del software
+        -  "Nombre":  Base de datos I
+
+    InfoDetalle:
+      type: object
+      properties:
+        Nombre:
+          type: string
+          example: Ingeniería del software I
+        Paralelo:
+          type: string
+          example: 1
+        Link:
+          type: string
+          example: https://neo.ucb.edu.bo/
+        Neo:
+          type: string
+          example: https://neo.ucb.edu.bo/
+        Docente:
+          type: string
+          example: Hernesto Campohermoso
+
+    InfoDeudas:
+      type: array
+      items:
+        type: object
+        properties:
+          Razón:
+            type: string
+          Monto:
+            type: string
+          Multa:
+            type: string
+      example:
+        - [ "Razón":  Seguro universitario 1-2022, "Monto":  80, "Multa":  2 ]
+        - [ "Razón":  Seguro universitario 2-2022, "Monto":  80, "Multa":  2 ]
+        - [ "Razón":  1era pension 1-2022, "Monto":  3550, "Multa":  2 ]
+        - [ "Razón":  2da pension 1-2022, "Monto":  3500, "Multa":  2 ]
+        - [ "Razón":  3era pension 1-2022, "Monto":  3500, "Multa":  2 ]
+        - [ "Razón":  4ta pension 1-2022, "Monto":  3500, "Multa":  2 ]
+
+
+
+
+
+    InfoNotas:
+      type: object
+      properties:
+        Siglas:
+          type: string
+          example: sis111
+        NEC:
+          type: string
+          example: 60
+        NEF:
+          type: string
+          example: 70
+        NOTA:
+          type: string
+          example: 75
+
+    InfPermiso:
+      type: object
+      properties:
+        idPermiso:
+          type: integer
+          example: 1
+        materia:
+          type: string
+          example: Ingenieria de Software
+        estado:
+          type: string
+          example: Rechazado
+
+    SolicPermiso:
+      type: object
+      properties:
+        EstudianteId:
+          type: integer
+          example: 1
+        MateriaId:
+          type: integer
+          example: 1
+        Fecha:
+          type: string
+          example: 20/01/2022
+
+
+    InfoLoginDocente:
+      type: object
+      properties:
+        DocenteId:
+          type: integer
+          example: 1
+        Nombres:
+          type: string
+          example: Ernesto
+        Apellidos:
+          type: string
+          example: Campohermoso
+
+    InfoHorarioDoc:
+      type: object
+      properties:
+        Día:
+          type: string
+          example: Martes
+        Materia:
+          type: string
+          example: Ingeniería del Software
+        Paralelo:
+          type: string
+          example: P1
+        Aula:
+          type: string
+          example: C003
+        HoraInicio:
+          type: string
+          pattern: date-time
+          example: 13:30:00
+        HoraFin:
+          type: string
+          pattern: date-time
+          example: 15:15:00
+
+    InfoListaDoc:
+      type: object
+      properties:
+        Numeración:
+          type: string
+          example: 1
+        Apellidos:
+          type: string
+          example: Valda Gutierrez
+        Nombres:
+          type: string
+          example: Moises Carlos
+        Carnet:
+          type: string
+          example: 12345678
