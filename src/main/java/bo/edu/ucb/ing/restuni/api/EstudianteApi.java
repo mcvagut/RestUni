@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class EstudianteApi {
+public class
+EstudianteApi {
     private ConsultaEstudianteBL consultaEstudianteBL;
 
     public EstudianteApi(ConsultaEstudianteBL consultaEstudianteBL) {
