@@ -400,7 +400,7 @@ paths:
             image/png:
               schema:
                 type: string
-                example: ["url": "//http:example.com/imagenDocente.png"]
+                example: {"url": "//http:example.com/imagenDocente.png"}
 
         404:
           description: Usuario sin foto de perfil
@@ -410,20 +410,22 @@ paths:
                 type: string
                 example: { "message": "Usuario sin foto de perfil, se usará una imagen por defecto." }
 
-  ### Lista de materias del docente
-  /Docente/{DocenteId}/Materias/:
+  ### Materias del docente
+  /Docente/{DocenteId}/materia/paralelo:
     get:
       tags:
         - Docente
-      summary: Obtener materias del docente
-      description: Obtener la lista de materias del usuario que inició la sesión
+      summary: Obtener paralelos de las materias del docente
+      description: Obtener paralelos de las materias del docente
       parameters:
         - name: DocenteId
           in: path
           description: id del docente
           required: true
           schema:
-            type: string
+            type: integer
+            example: 1
+
 
       responses:
         200:
@@ -431,13 +433,13 @@ paths:
           content:
             aplication/json:
               schema:
-                $ref: '#/components/schemas/ListMateriasDoc'
+                $ref: '#/components/schemas/MateriasDoc'
 
         404:
           description: El docente no tiene materias
           content:
             application/json:
-             schema:
+              schema:
                 type: string
                 example: { "message": "El docente no tiene asignadas las materias" }
 
@@ -485,11 +487,11 @@ paths:
 
 
   ##CONSULTA DE LISTA DE ESTUDIANTES POR MATERIA - DOCENTE
-  /Docente/{DocenteId}/Lista/Materia/{MateriaId}:
+  /Docente/{DocenteId}/materia/{MateriaId}/{paralelo}/alumnos:
     get:
       tags:
         - Docente
-      summary: El docente tiene información de la lista de estudiantes por materia.
+      summary: El docente tiene información de la lista de estudiantes por paralelo de la materia.
       description: Un docente puede realizar una consulta para conocer la lista de estudiantes, cada docente tiene unas materias asignadas, por ende, cuando selecciona su materia específica debe obtener como respuesta la lista de todos los estudiantes inscritos a dicha materia, en detalle se mostrarán los apellidos, nombres y carnet de identidad de los estudiantes.
       operationId: QueryListaDoc
 
@@ -509,6 +511,14 @@ paths:
           schema:
             type: integer
             example: 1
+
+        - in: path
+          name: paralelo
+          required: true
+          description: El paralelo de la materia.
+          schema:
+            type: integer
+            example: Paralelo 1
       responses:
         200:
           description: Consulta exitosa
@@ -585,7 +595,7 @@ components:
         -  "Nombre":  Internet de las cosas
         -  "Nombre":  Redes I
 
-    ListMateriasDoc:
+    MateriasDoc:
       type: array
       items:
         type: object
@@ -594,8 +604,15 @@ components:
             type: string
 
       example:
-        -  "Nombre":  Ingeniería del software
-        -  "Nombre":  Base de datos I
+        -  "Paralelo":  1
+           "Materia": Ingeniería del Software
+
+        -  "Paralelo":  1
+           "Materia": Base de Datos I
+
+
+
+
 
     InfoDetalle:
       type: object
@@ -614,7 +631,7 @@ components:
           example: https://neo.ucb.edu.bo/
         Docente:
           type: string
-          example: Hernesto Campohermoso
+          example: Ernesto Campohermoso
 
     InfoDeudas:
       type: array

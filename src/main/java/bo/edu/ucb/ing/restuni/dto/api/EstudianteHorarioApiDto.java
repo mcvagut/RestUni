@@ -1,24 +1,24 @@
-package bo.edu.ucb.ing.restuni.api;
+package bo.edu.ucb.ing.restuni.dto.api;
 
 
-import bo.edu.ucb.ing.restuni.dto.ddbb.HorarioEstudianteDto;
 
+import java.util.Date;
 import java.util.List;
 
-public class EstudianteApiDto {
+public class EstudianteHorarioApiDto {
     private Integer estudianteId;
     private String nombres;
     private String apellidos;
     private String ci;
     private String pass;
-    private List<HorarioEstudianteDto> dia;
-    private List<HorarioEstudianteDto> materia;
-    private List<HorarioEstudianteDto> paralelo;
-    private List<HorarioEstudianteDto> aula;
-    private List<HorarioEstudianteDto> horaInicio;
-    private List<HorarioEstudianteDto> horaFin;
+    private List<String> dia;
+    private List<String> materia;
+    private List<String> paralelo;
+    private List<String> aula;
+    private List<Date> horainicio;
+    private List<Date> horafin;
 
-    public EstudianteApiDto() {
+    public EstudianteHorarioApiDto() {
     }
 
     public Integer getEstudianteId() {
@@ -61,57 +61,57 @@ public class EstudianteApiDto {
         this.pass = pass;
     }
 
-    public List<HorarioEstudianteDto> getDia() {
+    public List<String> getDia() {
         return dia;
     }
 
-    public void setDia(List<HorarioEstudianteDto> dia) {
+    public void setDia(List<String> dia) {
         this.dia = dia;
     }
 
-    public List<HorarioEstudianteDto> getMateria() {
+    public List<String> getMateria() {
         return materia;
     }
 
-    public void setMateria(List<HorarioEstudianteDto> materia) {
+    public void setMateria(List<String> materia) {
         this.materia = materia;
     }
 
-    public List<HorarioEstudianteDto> getParalelo() {
+    public List<String> getParalelo() {
         return paralelo;
     }
 
-    public void setParalelo(List<HorarioEstudianteDto> paralelo) {
+    public void setParalelo(List<String> paralelo) {
         this.paralelo = paralelo;
     }
 
-    public List<HorarioEstudianteDto> getAula() {
+    public List<String> getAula() {
         return aula;
     }
 
-    public void setAula(List<HorarioEstudianteDto> aula) {
+    public void setAula(List<String> aula) {
         this.aula = aula;
     }
 
-    public List<HorarioEstudianteDto> getHoraInicio() {
-        return horaInicio;
+    public List<Date> getHorainicio() {
+        return horainicio;
     }
 
-    public void setHoraInicio(List<HorarioEstudianteDto> horaInicio) {
-        this.horaInicio = horaInicio;
+    public void setHorainicio(List<Date> horainicio) {
+        this.horainicio = horainicio;
     }
 
-    public List<HorarioEstudianteDto> getHoraFin() {
-        return horaFin;
+    public List<Date> getHorafin() {
+        return horafin;
     }
 
-    public void setHoraFin(List<HorarioEstudianteDto> horaFin) {
-        this.horaFin = horaFin;
+    public void setHorafin(List<Date> horafin) {
+        this.horafin = horafin;
     }
 
     @Override
     public String toString() {
-        return "EstudianteApiDto{" +
+        return "EstudianteHorarioApiDto{" +
                 "estudianteId=" + estudianteId +
                 ", nombres='" + nombres + '\'' +
                 ", apellidos='" + apellidos + '\'' +
@@ -121,8 +121,9 @@ public class EstudianteApiDto {
                 ", materia=" + materia +
                 ", paralelo=" + paralelo +
                 ", aula=" + aula +
-                ", horaInicio=" + horaInicio +
-                ", horaFin=" + horaFin +
+                ", horainicio=" + horainicio +
+                ", horafin=" + horafin +
                 '}';
     }
 }
+

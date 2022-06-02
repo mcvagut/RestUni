@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Bean;
 
 import javax.sql.DataSource;
 
+
 @SpringBootApplication
 @MapperScan("bo.edu.ucb.ing.restuni.dao")
 public class RestUniApplication {
-	
+
+
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
@@ -21,6 +23,7 @@ public class RestUniApplication {
 		return factoryBean.getObject();
 	}
 	public static void main(String[] args) {
+
 		SpringApplication.run(RestUniApplication.class, args);
 	}
 
