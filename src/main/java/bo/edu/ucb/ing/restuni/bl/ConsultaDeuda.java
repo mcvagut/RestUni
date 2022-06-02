@@ -1,6 +1,6 @@
 package bo.edu.ucb.ing.restuni.bl;
 
-import bo.edu.ucb.ing.restuni.api.EstudianteApiDto;
+
 import bo.edu.ucb.ing.restuni.dao.EstudianteDao;
 import bo.edu.ucb.ing.restuni.dao.DeudaDAO;
 import bo.edu.ucb.ing.restuni.dto.ddbb.EstudianteDto;
