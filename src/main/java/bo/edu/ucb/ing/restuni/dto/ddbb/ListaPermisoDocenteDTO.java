@@ -11,7 +11,13 @@ public class ListaPermisoDocenteDTO {
     private String razon;
     private String estado_permiso;
 
-    public ListaPermisoDocenteDTO(String apellidos, String nombres, String ci, Date fecha_inicio, Date fecha_fin, String razon, String estado_permiso) {
+    private Integer status;
+    private Integer tx_id;
+    private String tx_user;
+    private String tx_host;
+    private java.util.Date tx_date;
+
+    public ListaPermisoDocenteDTO(String apellidos, String nombres, String ci, Date fecha_inicio, Date fecha_fin, String razon, String estado_permiso, Integer status, Integer tx_id, String tx_user, String tx_host, java.util.Date tx_date) {
         this.apellidos = apellidos;
         this.nombres = nombres;
         this.ci = ci;
@@ -19,6 +25,11 @@ public class ListaPermisoDocenteDTO {
         this.fecha_fin = fecha_fin;
         this.razon = razon;
         this.estado_permiso = estado_permiso;
+        this.status = status;
+        this.tx_id = tx_id;
+        this.tx_user = tx_user;
+        this.tx_host = tx_host;
+        this.tx_date = tx_date;
     }
 
     public String getApellidos() {
@@ -77,6 +88,46 @@ public class ListaPermisoDocenteDTO {
         this.estado_permiso = estado_permiso;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getTx_id() {
+        return tx_id;
+    }
+
+    public void setTx_id(Integer tx_id) {
+        this.tx_id = tx_id;
+    }
+
+    public String getTx_user() {
+        return tx_user;
+    }
+
+    public void setTx_user(String tx_user) {
+        this.tx_user = tx_user;
+    }
+
+    public String getTx_host() {
+        return tx_host;
+    }
+
+    public void setTx_host(String tx_host) {
+        this.tx_host = tx_host;
+    }
+
+    public java.util.Date getTx_date() {
+        return tx_date;
+    }
+
+    public void setTx_date(java.util.Date tx_date) {
+        this.tx_date = tx_date;
+    }
+
     @Override
     public String toString() {
         return "ListaPermisoDocenteDTO{" +
@@ -87,6 +138,11 @@ public class ListaPermisoDocenteDTO {
                 ", fecha_fin=" + fecha_fin +
                 ", razon='" + razon + '\'' +
                 ", estado_permiso='" + estado_permiso + '\'' +
+                ", status=" + status +
+                ", tx_id=" + tx_id +
+                ", tx_user='" + tx_user + '\'' +
+                ", tx_host='" + tx_host + '\'' +
+                ", tx_date=" + tx_date +
                 '}';
     }
 }
