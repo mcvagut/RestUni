@@ -25,7 +25,7 @@ public class ConsultaDeuda {
         this.DeudaDAO = DeudaDAO;
     }
 
-    public List<DeudaDTO> findDeudaById(Long chatId) {
+    public List<DeudaDTO> findDeudaById(Integer chatId) {
         return DeudaDAO.findDeudaById(chatId+"");
     }
 
