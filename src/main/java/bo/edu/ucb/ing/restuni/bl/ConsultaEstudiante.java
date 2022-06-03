@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConsultaEstudiante {
+public class  ConsultaEstudiante {
     private final EstudianteDao estudianteDao;
     private static Logger LOGGER = LoggerFactory.getLogger(ConsultaEstudiante.class);
     public ConsultaEstudiante(EstudianteDao estudianteDao) {
